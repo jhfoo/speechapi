@@ -22,7 +22,6 @@ def my_job():
   now = datetime.now()
   hour = now.hour
   ampm = 'am'
-  print (f'hour: {hour}')
   if hour >= 12:
     hour -= 12
     ampm = 'pm'
@@ -47,7 +46,11 @@ async def lifespan(app: FastAPI):
   yield
   SpeechSvc.stop()
   scheduler.shutdown()
+  print (f'STOPPED: scheduler')
+  
   SpeechSvc.join()
+  print (f'STOPPED: speech service')
+
   print (f'FastAPI service stopped')
 
 app = FastAPI(lifespan=lifespan)
@@ -63,3 +66,7 @@ async def speak(text: str):
   SpeechSvc.enqueue(text)
   return {"message": text}
 
+if __name__ == "__main__":
+  import uvicorn
+
+  uvicorn.run(app, host="0.0.0.0", port=8000)
