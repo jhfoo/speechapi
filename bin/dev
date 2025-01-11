@@ -1,0 +1,4 @@
+PWD=`dirname $0`
+cd "$PWD/.."
+
+./venv/bin/python3 src/main.py $@
