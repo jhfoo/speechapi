@@ -1,9 +1,5 @@
 # core
 from contextlib import asynccontextmanager
-import time
-import threading
-import queue
-from datetime import datetime
 
 # community
 from fastapi import FastAPI
@@ -14,21 +10,9 @@ from piper.voice import PiperVoice
 
 # custom
 from SpeechSvc import SpeechService
+import TalkingClock
 
-def my_job():
-  global SpeechQueue
 
-  print(f"Job started at: {time.strftime('%Y-%m-%d %H:%M:%S')}")
-  now = datetime.now()
-  hour = now.hour
-  ampm = 'am'
-  if hour >= 12:
-    hour -= 12
-    ampm = 'pm'
-  print (f'Speech service: {SpeechSvc.status}')
-  SpeechSvc.enqueue(f'Job started at {hour} {now.minute} {ampm}')
-  time.sleep(5)
-  print(f"Job completed at: {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
 SpeechSvc = SpeechService()
 
@@ -36,12 +20,12 @@ SpeechSvc = SpeechService()
 async def lifespan(app: FastAPI):
   global SpeechSvc
 
-  scheduler = BackgroundScheduler()
-  scheduler.add_job(my_job, 'interval', seconds=10)
-  scheduler.start()
-  print (f'Schedulder started')
-
   SpeechSvc.start()
+  scheduler = BackgroundScheduler()
+  TalkingClock.addJob(scheduler)
+  # scheduler.add_job(my_job, 'interval', seconds=60)
+  scheduler.start()
+  SpeechSvc.enqueue('Scheduler started')
 
   yield
   SpeechSvc.stop()

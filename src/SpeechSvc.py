@@ -10,8 +10,16 @@ from piper.voice import PiperVoice
 
 DEFAULT_VOICE = 'data/en_GB-jenny_dioco-medium.onnx'
 
+ServiceThread = None
+
 class SpeechService (threading.Thread):
-  def __init__(self, VoiceName = DEFAULT_VOICE, DeviceId = 3):
+  def __init__(self, VoiceName = DEFAULT_VOICE, DeviceId = 11):
+    global ServiceThread
+    
+    if not ServiceThread is None:
+      raise Exception(f'Attempt to instantiate more than 1 SpeechService')
+    ServiceThread = self
+
     threading.Thread.__init__(self)
 
     self.TextQueue = queue.Queue()
