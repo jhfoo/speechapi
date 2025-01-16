@@ -1,4 +1,8 @@
+#!/usr/bin/bash
+
 PWD=`dirname $0`
 cd "$PWD/.."
+echo "Working directory: $PWD"
 
-./venv/bin/fastapi dev src/main.py --host 0.0.0.0
+#./venv/bin/fastapi dev src/main.py --host 0.0.0.0
+/usr/bin/tmux new -d -s svr ./venv/bin/fastapi dev src/main.py --host 0.0.0.0

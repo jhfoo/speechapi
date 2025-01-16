@@ -1,0 +1,13 @@
+[Unit]
+Description=SpeechAPI
+
+[Service]
+Type=oneshot
+User=jhfoo
+RemainAfterExit=yes
+ExecStart=/home/jhfoo/speechapi/bin/dev
+WorkingDirectory=/home/jhfoo/speechapi
+#KillMode=none
+
+[Install]
+WantedBy=multi-user.target

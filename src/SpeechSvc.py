@@ -13,7 +13,14 @@ DEFAULT_VOICE = 'data/en_GB-jenny_dioco-medium.onnx'
 ServiceThread = None
 
 class SpeechService (threading.Thread):
-  def __init__(self, VoiceName = DEFAULT_VOICE, DeviceId = 11):
+  def getDefaultDeviceId():
+    for dev in sd.query_devices():
+      if dev['name'] == 'default':
+        return dev['index']
+
+    return None
+
+  def __init__(self, VoiceName = DEFAULT_VOICE, DeviceId = getDefaultDeviceId()):
     global ServiceThread
     
     if not ServiceThread is None:
@@ -42,6 +49,7 @@ class SpeechService (threading.Thread):
   @property
   def status(self):
     return self._status
+
 
   def setStatus(self, NewStatus):
     with self.StatusLock:
